@@ -1,2 +1,2 @@
 # Blemon
-BLE desktop monitoring ESP32
+BLE Desktop monitoring ESP32
