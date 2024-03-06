@@ -12,18 +12,18 @@ class Main(QMainWindow):
         self.central_widget = QVBoxLayout()
         self.graphWidget = pg.PlotWidget()
         self.central_widget.addWidget(self.graphWidget)
-        self.device_combo = QComboBox()
-        self.device_combo.currentIndexChanged.connect(self.updateGraph)
-        self.central_widget.addWidget(self.device_combo)
+        self.devCombo = QComboBox()
+        self.devCombo.currentIndexChanged.connect(self.updateGraph)
+        self.central_widget.addWidget(self.devCombo)
         self.setCentralWidget(self.graphWidget)
-        self.port_serial = serial.Serial('/dev/ttyUSB0', 115200)
+        self.sPort = serial.Serial('/dev/ttyUSB0', 115200)
         self.x = {}
         self.y = {}
         self.warna = [QColor(255, 0, 0), QColor(0, 255, 0), QColor(0, 0, 255)]
         self.garis_data = {}
 
     def updateGraph(self):
-        data = self.port_serial.readline().decode('utf-8').strip()
+        data = self.sPort.readline().decode('utf-8').strip()
         mac, nama, rssi = data.split(':')
         rssi = int(rssi)
         if mac not in self.x:
@@ -35,8 +35,8 @@ class Main(QMainWindow):
         self.y[mac].append(rssi)
         self.garis_data[mac].setData(self.x[mac], self.y[mac])
 
-        if nama not in [self.device_combo.itemText(i) for i in range(self.device_combo.count())]:
-            self.device_combo.addItem(nama)
+        if nama not in [self.devCombo.itemText(i) for i in range(self.devCombo.count())]:
+            self.devCombo.addItem(nama)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
